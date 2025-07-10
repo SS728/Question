@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Can I be your girlfriend? ❤️</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Georgia&display=swap');
+  body {
+    margin: 0; padding: 0;
+    font-family: 'Georgia', serif;
+    background-color: #5b3a29; /* warm marrón */
+    color: #fff8f0;
+    overflow-x: hidden;
+    text-align: center;
+    min-height: 100vh;
+    position: relative;
+  }
+  .container {
+    padding: 80px 20px 120px;
+    max-width: 600px;
+    margin: auto;
+    background-color: rgba(0,0,0,0.5);
+    border-radius: 15px;
+  }
+  h1 {
+    font-size: 3em;
+    margin-bottom: 0.2em;
+  }
+  p {
+    font-size: 1.3em;
+    margin-bottom: 40px;
+  }
+  button {
+    font-size: 1.2em;
+    padding: 15px 30px;
+    margin: 10px;
+    border: none;
+    border-radius: 12px;
+    background-color: #fff8f0;
+    color: #5b3a29;
+    cursor: pointer;
+    transition: all 0.25s ease-in-out;
+  }
+  button:hover {
+    transform: scale(1.1);
+    background-color: #e8d2c1;
+  }
+  #question, #result {
+    display: none;
+  }
+  #playMusicBtn {
+    margin-top: 20px;
+    background: #ffb6b9;
+    color: #5b3a29;
+    font-weight: bold;
+  }
+  /* Confetti container */
+  #confetti-canvas {
+    position: fixed;
+    pointer-events: none;
+    top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 1000;
+  }
+  /* Stickers styling */
+  .sticker {
+    position: fixed;
+    width: 70px;
+    opacity: 0.85;
+    user-select: none;
+    pointer-events: none;
+    animation: floatUpDown 4s ease-in-out infinite alternate;
+  }
+  /* Different speeds and positions for fun */
+  #sticker-clairo { bottom: 20px; left: 15%; animation-duration: 5s; }
+  #sticker-billie { top: 25%; right: 18%; animation-duration: 4.5s; }
+  #sticker-corpse { top: 10%; left: 50%; width: 90px; animation-duration: 6s; }
+  #sticker-loveisland { bottom: 30%; right: 35%; width: 80px; animation-duration: 4.8s; }
+  #sticker-stephanie { top: 50%; left: 25%; width: 75px; animation-duration: 5.5s; }
+  #sticker-heart1 { top: 15%; left: 10%; width: 40px; animation-duration: 3.5s; }
+  #sticker-heart2 { bottom: 15%; right: 10%; width: 50px; animation-duration: 3.8s; }
+
+  @keyframes floatUpDown {
+    0% { transform: translateY(0px) }
+    100% { transform: translateY(15px) }
+  }
+
+  /* Cat pic and text for yes */
+  #cat-container {
+    margin-top: 30px;
+  }
+  #cat-pic {
+    max-width: 200px;
+    border-radius: 15px;
+    box-shadow: 0 0 15px #fff4ccaa;
+  }
+  #resultText {
+    font-size: 1.8em;
+    margin-top: 15px;
+    color: #ffdfba;
+    font-weight: bold;
+  }
+</style>
+</head>
+<body>
+
+<!-- Stickers -->
+<img src="https://i.imgur.com/qwIV2hT.png" alt="Clairo" class="sticker" id="sticker-clairo" />
+<img src="https://i.imgur.com/ksKNbE6.png" alt="Billie Eilish" class="sticker" id="sticker-billie" />
+<img src="https://i.imgur.com/V2Ez0aL.png" alt="Corpse Bride" class="sticker" id="sticker-corpse" />
+<img src="https://i.imgur.com/XTvy0bb.png" alt="Love Island" class="sticker" id="sticker-loveisland" />
+<img src="https://i.imgur.com/xUlHkLc.png" alt="Stephanie Soo" class="sticker" id="sticker-stephanie" />
+<img src="https://i.imgur.com/ScnM8p6.png" alt="Heart" class="sticker" id="sticker-heart1" />
+<img src="https://i.imgur.com/F4F4Sox.png" alt="Heart" class="sticker" id="sticker-heart2" />
+
+<div class="container">
+  <h1>Can I be your girlfriend? ❤️</h1>
+  <p>Hey Beautiful 💌 I made this just for you...</p>
+  <button id="startBtn">Tap to continue</button>
+
+  <div id="question">
+    <button id="yesBtn">Yes 💖</button>
+    <button id="noBtn">No 😅</button>
+  </div>
+
+  <div id="result">
+    <div id="cat-container">
+      <img id="cat-pic" src="https://i.imgur.com/4AiXzf8.jpg" alt="Cute cat" />
+    </div>
+    <div id="resultText">That's us now.</div>
+  </div>
+
+  <button id="playMusicBtn">▶️ Play Our Song</button>
+</div>
+
+<!-- Confetti canvas -->
+<canvas id="confetti-canvas"></canvas>
+
+<!-- YouTube Embed for Hello by Clairo, muted autoplay loop -->
+<iframe id="yt-player" width="0" height="0" src="https://www.youtube.com/embed/3v6MBHpzZg8?autoplay=1&mute=1&loop=1&playlist=3v6MBHpzZg8" frameborder="0" allow="autoplay" allowfullscreen></iframe>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+<script>
+  const startBtn = document.getElementById('startBtn');
+  const questionDiv = document.getElementById('question');
+  const yesBtn = document.getElementById('yesBtn');
+  const noBtn = document.getElementById('noBtn');
+  const resultDiv = document.getElementById('result');
+  const playMusicBtn = document.getElementById('playMusicBtn');
+  const ytPlayer = document.getElementById('yt-player');
+  let noClickCount = 0;
+
+  startBtn.addEventListener('click', () => {
+    startBtn.style.display = 'none';
+    questionDiv.style.display = 'block';
+  });
+
+  yesBtn.addEventListener('click', () => {
+    questionDiv.style.display = 'none';
+    resultDiv.style.display = 'block';
+    playConfetti();
+  });
+
+  noBtn.addEventListener('click', () => {
+    noClickCount++;
+    const scale = Math.max(0, 1 - noClickCount * 0.2);
+    noBtn.style.transform = `scale(${scale})`;
+    if (scale <= 0.1) {
+      noBtn.style.display = 'none';
+    }
+  });
+
+  playMusicBtn.addEventListener('click', () => {
+    ytPlayer.src = "https://www.youtube.com/embed/3v6MBHpzZg8?autoplay=1&mute=0&loop=1&playlist=3v6MBHpzZg8";
+    playMusicBtn.style.display = 'none';
+  });
+
+  function playConfetti() {
+    const duration = 5 * 1000;
+    const end = Date.now() + duration;
+
+    (function frame() {
+      confetti({
+        particleCount: 5,
+        angle: 60,
+        spread: 55,
+        origin: { x: 0 }
+      });
+      confetti({
+        particleCount: 5,
+        angle: 120,
+        spread: 55,
+        origin: { x: 1 }
+      });
+      if (Date.now() < end) {
+        requestAnimationFrame(frame);
+      }
+    })();
+  }
+</script>
+
+</body>
+</html>
